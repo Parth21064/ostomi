@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>একটা প্রশ্ন ছিল🌸</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-family: "Noto Serif Bengali", serif;
+      color: #fff6e8;
+      background:
+        radial-gradient(ellipse at top, #7f344e 0%, transparent 65%),
+        linear-gradient(145deg, #210d20, #571b35 55%, #170e20);
+    }
+
+    .petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -30px;
+      animation: fall linear infinite;
+      opacity: .8;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(540deg); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: min(92%, 460px);
+      padding: 38px 22px;
+      text-align: center;
+      border: 1px solid #e9bf7b88;
+      border-radius: 25px;
+      background: #2d1028d9;
+      box-shadow: 0 0 60px #f3a15b25;
+      backdrop-filter: blur(12px);
+    }
+
+    .flower { font-size: 48px; }
+
+    h1 {
+      font-size: clamp(27px, 7vw, 36px);
+      line-height: 1.6;
+      color: #ffe1a3;
+    }
+
+    .subtitle {
+      color: #f4c8d4;
+      line-height: 1.9;
+    }
+
+    .buttons {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: bold;
+      transition: transform .35s ease, font-size .35s ease;
+    }
+
+    #yes {
+      padding: 15px 30px;
+      font-size: 20px;
+      color: white;
+      background: linear-gradient(135deg, #ff4166, #c9184a);
+      box-shadow: 0 5px 20px #ff416655;
+    }
+
+    #no {
+      padding: 12px 22px;
+      font-size: 16px;
+      color: #70233a;
+      background: #fff0dc;
+    }
+
+    .note {
+      min-height: 54px;
+      margin-top: 24px;
+      color: #ffdaab;
+      line-height: 1.9;
+    }
+
+    .hidden { display: none !important; }
+
+    #popup {
+      position: fixed;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: #130813bb;
+    }
+
+    .popup-card {
+      width: min(100%, 360px);
+      padding: 28px 22px;
+      border-radius: 22px;
+      text-align: center;
+      color: #6e2340;
+      background: #fff0dc;
+      box-shadow: 0 0 60px #ffb3c655;
+      animation: appear .3s ease;
+    }
+
+    @keyframes appear {
+      from { transform: scale(.75); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-card p { line-height: 2; }
+
+    .popup-card button {
+      padding: 12px 24px;
+      color: white;
+      background: #d62953;
+      font-size: 16px;
+    }
+
+    .magic-title {
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      to { text-shadow: 0 0 25px #ffb8cf; }
+    }
+
+    .final-message {
+      line-height: 2.1;
+      font-size: 18px;
+    }
+
+    .heart {
+      position: fixed;
+      z-index: 4;
+      bottom: -40px;
+      pointer-events: none;
+      animation: rise 4s ease-out forwards;
+    }
+
+    @keyframes rise {
+      to { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
+    }
+
+    #magic { animation: appear 1s ease; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+
+  <main class="card" id="question">
+    <div class="flower">🌺</div>
+    <p class="subtitle">একটা ছোট্ট প্রশ্ন ছিল...👉👈</p>
+    <h1>এই অষ্টমীতে<br>এক সাথে<br>পুষ্পাঞ্জলি দিতে যাবি?</h1>
+    <p class="subtitle">একসাথে অঞ্জলি, একটু আড্ডা আর অনেক সুন্দর স্মৃতি... 🌸</p>
+
+    <div class="buttons">
+      <button id="yes">হ্যাঁ! 🫴</button>
+      <button id="no">না 😭</button>
+    </div>
+
+    <div class="note" id="note">ভালো করে ভেবে উত্তর দিস কিন্তু! 😂💗</div>
+  </main>
+
+  <section id="popup" class="hidden">
+    <div class="popup-card">
+      <div style="font-size:38px">🥹🌷</div>
+      <p id="popupText"></p>
+      <button id="closePopup">আচ্ছা, আবার ভাবছি 🤔</button>
+    </div>
+  </section>
+
+  <main class="card hidden" id="magic">
+    <div class="flower">🌸✨🌸</div>
+    <h1 class="magic-title">ইয়েএএ! 😁</h1>
+    <p class="final-message">
+      <br>
+      যাই হোক, তাহলে এই অষ্টমীতে একসাথে পুষ্পাঞ্জলি দেওয়া পাকা! 🌺<br>
+      তোর সাথে পুষ্পাঞ্জলি দেওয়ার<br>
+      অপেক্ষায় রইলাম। 🌺<br>বেশি কিছু প্ল্যান করিনি, তুই শুধু চলে আসিস। বাকিটা দেখা যাবে! 🤝<br>
+      <span style="color:#ffe1a3">আর হ্যাঁ, এই YES বলার স্ক্রিনশটটা কিন্তু আমার কাছে আসেনি... তাই প্রমাণ চাইলে আবার বলতে হবে! 😂</span>
+    </p>
+    <div class="flower">🪔 💗 🪔</div>
+  </main>
+
+  <script>
+    const yes = document.getElementById("yes");
+    const no = document.getElementById("no");
+    const note = document.getElementById("note");
+    const popup = document.getElementById("popup");
+    const popupText = document.getElementById("popupText");
+    const closePopup = document.getElementById("closePopup");
+    const question = document.getElementById("question");
+    const magic = document.getElementById("magic");
+
+    const messages = [
+      "আরে, না বললি কেন? 🥹 একবার তো ভেবে দেখ🌸",
+      "সত্যি না? পিলিজ 👉🏻👈🏻",
+      "আচ্ছা, মোমো খাওয়াবো 🤣",
+      "আর একবার ভেবে দেখ? 🥹 ",
+      "শেষবারের মতো জিজ্ঞেস করছি... নাকি আবারও জিজ্ঞেস করব? 🙈",
+      "সুওর এত্তো বার বলছি সোনাজাচ্ছেন 🫠"
+    ];
+
+    let noCount = 0;
+    let yesScale = 1;
+    let noScale = 1;
+
+    no.addEventListener("click", () => {
+      const message = messages[noCount % messages.length];
+      noCount++;
+
+      yesScale = Math.min(yesScale + 0.22, 2.5);
+      noScale = Math.max(noScale - 0.12, 0.55);
+
+      yes.style.transform = `scale(${yesScale})`;
+      no.style.transform = `scale(${noScale})`;
+
+      note.textContent = "আরেকবার ভেবে দেখবে? 🥹💗";
+
+      popupText.textContent = message;
+      popup.classList.remove("hidden");
+    });
+
+    closePopup.addEventListener("click", () => {
+      popup.classList.add("hidden");
+    });
+
+    
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLelKNBZCfYYInPpffK4YTgI0L7PQZheG-O51uXxeYiH-XpYe7ZeYlts1TdCRw1Be1aA/exec";
+
+let yesClicked = false;
+
+yes.addEventListener("click", () => {
+  if (yesClicked) return;
+  yesClicked = true;
+
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=UTF-8"
+    },
+    body: JSON.stringify({
+      event: "yes"
+    })
+  }).catch(error => {
+    console.error("Notification request failed:", error);
+  });
+
+  // Start the magical reveal
+  question.classList.add("hidden");
+  popup.classList.add("hidden");
+  magic.classList.remove("hidden");
+
+  for (let i = 0; i < 65; i++) {
+    setTimeout(createHeart, i * 65);
+  }
+});
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = ["💗", "🌸", "🌺", "✨"][Math.floor(Math.random() * 5)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (18 + Math.random() * 24) + "px";
+      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6500);
+    }
+
+    // Floating festive petals
+    const petals = document.getElementById("petals");
+
+    for (let i = 0; i < 22; i++) {
+      const petal = document.createElement("span");
+      petal.className = "petal";
+      petal.textContent = ["🌸", "✿", "🌼"][i % 3];
+      petal.style.left = Math.random() * 100 + "vw";
+      petal.style.animationDuration = (7 + Math.random() * 10) + "s";
+      petal.style.animationDelay = (-Math.random() * 15) + "s";
+      petal.style.fontSize = (14 + Math.random() * 15) + "px";
+      petals.appendChild(petal);
+    }
+  </script>
+</body>
+</html>
